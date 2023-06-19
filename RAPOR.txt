@@ -1,3 +1,6 @@
+İlk başta, gerekli kütüphaneleri ve modülleri import ediyoruz:
+python
+Copy code
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
@@ -10,7 +13,11 @@ from deep_learning_model import create_deep_learning_model
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTextEdit, QLabel, QPushButton
 from PyQt5.QtCore import QTimer
+Bu kısımda, kullanacağımız kütüphaneleri ve modülleri import ediyoruz. Örneğin, numpy ile sayısal hesaplamalar yapmak için, requests ile web istekleri göndermek için, BeautifulSoup ile HTML içeriğini işlemek için, sklearn ile makine öğrenimi modelleri ve metrikleri kullanmak için ve PyQt5 ile bir kullanıcı arayüzü oluşturmak için kütüphaneleri import ediyoruz.
 
+Ardından, App adında bir QWidget alt sınıfı tanımlıyoruz:
+python
+Copy code
 class App(QWidget):
 
     def __init__(self):
@@ -38,7 +45,11 @@ class App(QWidget):
         layout.addWidget(self.start_button)
 
         self.setLayout(layout)
+Bu sınıf, kullanıcı arayüzünü oluşturur. initUI metodunda, pencere başlığını, boyutunu ve düzenini ayarlıyoruz. Ardından, bir QVBoxLayout düzeni oluşturuyoruz ve bu düzenin içine metin girişi (QTextEdit), etiketler (QLabel) ve bir düğme (QPushButton) ekliyoruz. Bu bileşenlerin her biri kullanıcı arayüzünde görüntülenecek.
 
+Daha sonra, analizi başlatmak için kullanılacak metodları tanımlıyoruz:
+python
+Copy code
     def start_analysis(self):
         self.start_button.setEnabled(False)
         self.start_button.setText("Analiz Başladı")
@@ -60,9 +71,11 @@ class App(QWidget):
 
         self.btc_label.setText(f"Anlık Bitcoin Fiyatı: ${bitcoin_price}")
         self.sentiment_label.setText(f"Twitter'daki Duygu Analizi Sonucu: {sentiment}")
+start_analysis metodunda, analizi başlatmak için kullanılan düğme tıklandığında çağrılır. Düğmeyi devre dışı bırakır, metnini günceller ve bir QTimer oluşturarak belirli aralıklarla update_info metodunu çağırır. update_info metodunda, örnek olarak tweetler, duygu analizi sonucu ve Bitcoin fiyatı gibi anlık değerler kullanılarak kullanıcı arayüzünü günceller. Örnekteki değerler yerine gerçek verileri almanız gerekecektir.
 
-
-
+Sonraki bölümde, etiketli verileri oluşturuyoruz:
+python
+Copy code
 # Örnek etiketli veri (duygu analizi değeri ve Bitcoin fiyatındaki değişime göre etiketler)
 data = np.array([
     [0.1, 1],
@@ -75,29 +88,39 @@ data = np.array([
 
 X = data[:, 0].reshape(-1, 1)  # Duygu analizi değerleri
 y = data[:, 1]  # Etiketler (0: düşüş, 1: artış)
+Bu bölümde, bir örnek veri seti oluşturuyoruz. data adlı bir NumPy dizisi kullanarak, duygu analizi değeri ve Bitcoin fiyatındaki değişime göre etiketleri içeren veri setini oluşturuyoruz. Daha sonra, X ve y değişkenlerine sırasıyla duygu analizi değerlerini ve etiketleri atıyoruz.
 
-# Veriyi eğitim ve test veri setlerine bölelim
+Veri setini eğitim ve test veri setlerine bölen kısım:
+python
+Copy code
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+train_test_split fonksiyonunu kullanarak veri setini eğitim ve test veri setlerine ayırıyoruz. X_train, X_test, y_train ve y_test değişkenlerine sırasıyla eğitim ve test için gerekli olan giriş ve çıkış verilerini atıyoruz. Veri setinin %80'i eğitim için kullanılacak ve %20'si test için kullanılacak şekilde bölünüyor.
 
-
-# Derin öğrenme modelini oluşturalım ve eğitelim
+Derin öğrenme modelini oluşturma ve eğitme kısmı:
+python
+Copy code
 model = create_deep_learning_model(input_dim=1)
 model.fit(X_train, y_train, epochs=50, batch_size=1, verbose=0)
+create_deep_learning_model fonksiyonunu kullanarak bir derin öğrenme modeli oluşturuyoruz. Bu fonksiyonun ayrıntıları kodda görünmüyor, ancak derin öğrenme modelini tanımladığınız ve eğittiğiniz yerdir. Oluşturulan modeli, X_train ve y_train verileriyle eğitiyoruz. Eğitim için 50 epoch ve 1'lik bir batch boyutu kullanılıyor.
 
-# Veriyi eğitim ve test veri setlerine bölelim
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Lojistik Regresyon modelini eğitelim
+Lojistik regresyon modelini eğitme kısmı:
+python
+Copy code
 model = LogisticRegression()
 model.fit(X_train, y_train)
+LogisticRegression sınıfını kullanarak bir lojistik regresyon modeli oluşturuyoruz ve X_train ve y_train verileriyle eğitiyoruz.
 
-# Modelin doğruluğunu test veri seti üzerinde ölçelim
+Modelin doğruluğunu test etme kısmı:
+python
+Copy code
 y_pred = (model.predict(X_test) > 0.5).astype('int32')
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Model doğruluğu: {accuracy}")
+X_test verilerini kullanarak oluşturulan modelin tahminlerini alıyoruz ve bu tahminleri etiketlere dönüştürerek y_pred değişkenine atıyoruz. Daha sonra, bu tahminleri gerçek etiketlerle karşılaştırarak modelin doğruluğunu hesaplıyoruz ve ekrana yazdırıyoruz.
 
-
-
+Sonraki bölüm, Twitter'dan tweetleri almak, duygu analizini yapmak ve Bitcoin fiyatını almak için kullanılan kodu içerir:
+python
+Copy code
 import time
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -131,8 +154,6 @@ def manual_login_to_twitter(driver):
     print("Lütfen tarayıcıda Twitter'a giriş yapın ve devam etmek için Enter tuşuna basın.")
     input()
 
-
-
 def get_tweets_scraping(driver, search_term="bitcoin", count=100):
     url = f"https://twitter.com/search?q={search_term}&src=typed_query"
     driver.get(url)
@@ -150,8 +171,6 @@ def get_tweets_scraping(driver, search_term="bitcoin", count=100):
             time.sleep(3)
 
     return tweet_texts[:count]
-
-
 
 def analyze_sentiment(tweets):
     if len(tweets) == 0:
@@ -190,3 +209,11 @@ while True:
         print("Duygu analizi nötr olduğu için fiyat değişimi öngörülemiyor.")
     
     time.sleep(60)  # 1 dakika bekle
+Bu bölümde, Twitter'dan tweetleri almak, duygu analizini yapmak ve Bitcoin fiyatını almak için gerekli olan işlevleri ve kodu içerir. Ayrıntıları aşağıda bulabilirsiniz:
+
+manual_login_to_twitter: Tarayıcıda Twitter'a giriş yapmanızı ve devam etmek için Enter tuşuna basmanızı sağlayan bir işlevdir.
+get_tweets_scraping: Selenium kütüphanesi kullanılarak Twitter'dan belirli bir arama terimi için tweetleri çeken bir işlevdir. İlgili tweetleri sayfa kaydırma işlemi yaparak çeker.
+analyze_sentiment: Tweetlerin duygu analizini yapar ve ortalama duygu skorunu döndürür. VADER (Valence Aware Dictionary and sEntiment Reasoner) lexiconunu kullanır.
+get_bitcoin_price: CoinGeckoAPI kullanarak Bitcoin'in anlık fiyatını alır.
+manual_login_to_twitter işlevi çağrılarak kullanıcının Twitter'a giriş yapması beklenir.
+Daha sonra, while True döngüsü içinde tweetleri çeker, duygu analizini yapar, Bitcoin fiyatını alır ve sonuçları ekrana yazdırır. Bu döngü her bir dakikada bir tekrarlanır (time.sleep(60)).

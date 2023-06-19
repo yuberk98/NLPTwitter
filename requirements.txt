@@ -1,0 +1,26 @@
+***numpy: NumPy, sayısal işlemler ve çok boyutlu diziler için temel bir pakettir.
+Kurulum: pip install numpy
+
+***requests: Requests, HTTP istekleri yapmak için kullanılan bir Python kütüphanesidir.
+Kurulum: pip install requests
+
+***BeautifulSoup: BeautifulSoup, HTML ve XML dosyalarını ayrıştırmak için kullanılan bir Python kütüphanesidir.
+Kurulum: pip install beautifulsoup4
+
+***scikit-learn: Scikit-learn, veri madenciliği ve veri analizi için kullanılan bir Python kütüphanesidir.
+Kurulum: pip install scikit-learn
+
+***Keras (veya Tensorflow): Bu programda belirtilmeyen bir derin öğrenme modeli oluşturuluyor. Bu modeli oluşturmak için Keras veya Tensorflow gibi bir derin öğrenme kütüphanesinin kurulu olması gerekiyor.
+Kurulum: pip install keras veya pip install tensorflow
+
+***PyQt5: PyQt5, kullanıcı arayüzleri oluşturmak için kullanılan bir Python kütüphanesidir.
+Kurulum: pip install pyqt5
+
+***nltk: NLTK, dil işleme amaçlı bir Python kütüphanesidir.
+Kurulum: pip install nltk
+
+***pycoingecko: PyCoinGecko, CoinGecko API'sini Python'da kullanmak için bir kütüphanedir.
+Kurulum: pip install pycoingecko
+
+***selenium: Selenium, web tarayıcı otomasyonu için kullanılan bir Python kütüphanesidir.
+Kurulum: pip install selenium
